@@ -17,15 +17,10 @@ jobs:
         
       - name: Build APK
         run: |
-          GRADLEW_PATH=$(find . -name "gradlew" -type f | head -n 1)
-          if [ -z "$GRADLEW_PATH" ]; then
-            echo "Error: gradlew not found!"
-            exit 1
-          fi
-          PROJECT_DIR=$(dirname "$GRADLEW_PATH")
+          BUILD_FILE=$(find . -name "build.gradle*" -type f | head -n 1)
+          PROJECT_DIR=$(dirname "$BUILD_FILE")
           cd "$PROJECT_DIR"
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          gradle assembleDebug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
