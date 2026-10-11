@@ -17,12 +17,18 @@ jobs:
         
       - name: Build APK
         run: |
-          cd ReelsBlockerv4
-          chmod +x gradlew || true
+          GRADLEW_PATH=$(find . -name "gradlew" -type f | head -n 1)
+          if [ -z "$GRADLEW_PATH" ]; then
+            echo "Error: gradlew not found!"
+            exit 1
+          fi
+          PROJECT_DIR=$(dirname "$GRADLEW_PATH")
+          cd "$PROJECT_DIR"
+          chmod +x gradlew
           ./gradlew assembleDebug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ReelsBlocker-v4-APK
-          path: ReelsBlockerv4/app/build/outputs/apk/debug/**/*.apk
+          path: /**/*.apk
